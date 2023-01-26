@@ -1,0 +1,6 @@
+setup.py
+mock_agent/__init__.py
+mock_agent.egg-info/PKG-INFO
+mock_agent.egg-info/SOURCES.txt
+mock_agent.egg-info/dependency_links.txt
+mock_agent.egg-info/top_level.txt

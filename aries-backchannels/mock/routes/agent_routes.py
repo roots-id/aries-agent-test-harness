@@ -4,7 +4,7 @@ from aiohttp import web
 from typing_extensions import TypedDict, Literal
 
 if TYPE_CHECKING:
-    from acapy.acapy_backchannel import AcaPyAgentBackchannel
+    from mock.mock_backchannel import MockAgentBackchannel
 
 
 routes = web.RouteTableDef()
@@ -18,7 +18,7 @@ class AgentStartParameters(TypedDict):
 @routes.post("/agent/command/agent/start/")
 async def get_mediation_record(request: web.Request):
     body = await request.json()
-    backchannel: "AcaPyAgentBackchannel" = request["backchannel"]
+    backchannel: "MockAgentBackchannel" = request["backchannel"]
     parameters: AgentStartParameters = body.get("data", {}).get("parameters", {})
 
     # Get agent host args. If inbound / outbound transports is not provided we use http by default

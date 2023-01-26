@@ -5,14 +5,14 @@ from typing import Any, Dict, TYPE_CHECKING
 from aiohttp import web
 
 if TYPE_CHECKING:
-    from acapy.acapy_backchannel import AcaPyAgentBackchannel
+    from mock.mock_backchannel import MockAgentBackchannel
 
 
 routes = web.RouteTableDef()
 
 
 def response_state_from_mediation_record(record: Dict[str, Any]):
-    """Maps from acapy mediation role and state to AATH state"""
+    """Maps from mock mediation role and state to AATH state"""
     state = record["state"]
 
     mediator_states = {
@@ -41,7 +41,7 @@ def mediation_record_to_response(record: Dict[str, Any]):
 
 
 async def get_mediation_record_by_connection_id(
-    backchannel: "AcaPyAgentBackchannel", connection_id: str
+    backchannel: "MockAgentBackchannel", connection_id: str
 ):
     (_, resp_text) = await backchannel.admin_GET(
         "/mediation/requests", params={"conn_id": connection_id}
@@ -54,7 +54,7 @@ async def get_mediation_record_by_connection_id(
             reason=f"No mediation record found for connection with id {connection_id}"
         )
 
-    # Should not be possible. ACA-Py only allows one mediation record set-up per connection
+    # Should not be possible. Mock only allows one mediation record set-up per connection
     if len(resp_json["results"]) > 1:
         raise web.HTTPConflict(
             reason=f"Multiple mediation records found for connection with id {connection_id}"
@@ -66,7 +66,7 @@ async def get_mediation_record_by_connection_id(
 @routes.get("/agent/command/mediation/{connection_id}")
 async def get_mediation_record(request: web.Request):
     connection_id: str = request.match_info["connection_id"]
-    backchannel: "AcaPyAgentBackchannel" = request["backchannel"]
+    backchannel: "MockAgentBackchannel" = request["backchannel"]
 
     mediation_record = await get_mediation_record_by_connection_id(
         backchannel, connection_id
@@ -80,7 +80,7 @@ async def mediation_send_request(request: web.Request):
     """Send mediate-request message to agent with specified connection id."""
     body = await request.json()
     connection_id: str = body.get("id")
-    backchannel: "AcaPyAgentBackchannel" = request["backchannel"]
+    backchannel: "MockAgentBackchannel" = request["backchannel"]
 
     (resp_status, resp_text) = await backchannel.admin_POST(
         f"/mediation/request/{connection_id}", {}
@@ -97,7 +97,7 @@ async def mediation_send_request(request: web.Request):
 async def mediation_send_grant(request: web.Request):
     body = await request.json()
     connection_id: str = body.get("id")
-    backchannel: "AcaPyAgentBackchannel" = request["backchannel"]
+    backchannel: "MockAgentBackchannel" = request["backchannel"]
 
     # This seems to need a sleep to work
     await asyncio.sleep(2)
@@ -114,7 +114,7 @@ async def mediation_send_grant(request: web.Request):
 async def mediation_send_deny(request: web.Request):
     body = await request.json()
     connection_id: str = body.get("id")
-    backchannel: "AcaPyAgentBackchannel" = request["backchannel"]
+    backchannel: "MockAgentBackchannel" = request["backchannel"]
 
     # This seems to need a sleep to work
     sleep(2)

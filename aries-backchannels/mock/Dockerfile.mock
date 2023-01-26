@@ -15,6 +15,7 @@ RUN chmod +x ./jq
 
 COPY python/requirements.txt python/
 COPY mock/requirements-latest.txt mock/
+COPY mock/mock-agent mock-agent
 RUN pip install -r mock/requirements-latest.txt && pip install -r python/requirements.txt
 
 # Copy the necessary files from the AATH Backchannel sub-folders

@@ -688,7 +688,7 @@ class MockAgentBackchannel(AgentBackchannel):
             )
 
             log_msg(resp_status, resp_text)
-            resp_text = self.move_field_to_top_level(resp_text, "schema_id")
+            # resp_text = self.move_field_to_top_level(resp_text, "schema_id")
             return (resp_status, resp_text)
 
         elif command.topic == "credential-definition":
@@ -721,9 +721,9 @@ class MockAgentBackchannel(AgentBackchannel):
             )
 
             log_msg(resp_status, resp_text)
-            resp_text = self.move_field_to_top_level(
-                resp_text, "credential_definition_id"
-            )
+            # resp_text = self.move_field_to_top_level(
+            #     resp_text, "credential_definition_id"
+            # )
             return (resp_status, resp_text)
 
         elif command.topic == "issue-credential":
@@ -1260,7 +1260,7 @@ class MockAgentBackchannel(AgentBackchannel):
                 resp_text = json.dumps(resp_json)
 
             log_msg(resp_status, resp_text)
-            resp_text = self.move_field_to_top_level(resp_text, "state")
+            # resp_text = self.move_field_to_top_level(resp_text, "state")
 
             if operation == "create-offer":
                 resp_json = json.loads(resp_text)
@@ -1335,26 +1335,26 @@ class MockAgentBackchannel(AgentBackchannel):
                 )
 
             log_msg(resp_status, resp_text)
-            resp_text = self.move_field_to_top_level(resp_text, "state")
+            # resp_text = self.move_field_to_top_level(resp_text, "state")
             return (resp_status, resp_text)
 
-    def move_field_to_top_level(self, resp_text: str, field_to_move: str):
-        # Some responses have been changed to nest fields that were once at top level.
-        # The Test harness expects the these fields to be at the root. Other agents have it at the root.
-        # This could be removed if it is common across agents to nest these fields in `sent:` for instance.
-        resp_json = json.loads(resp_text)
-        if field_to_move in resp_json:
-            # If it is already a top level field, forget about it.
-            return resp_text
-        else:
-            # Find the field and put a copy as a top level
-            for key in resp_json:
-                if field_to_move in resp_json[key]:
-                    field_value = resp_json[key][field_to_move]
-                    resp_json[field_to_move] = field_value
-                    return json.dumps(resp_json)
+    # def move_field_to_top_level(self, resp_text: str, field_to_move: str):
+    #     # Some responses have been changed to nest fields that were once at top level.
+    #     # The Test harness expects the these fields to be at the root. Other agents have it at the root.
+    #     # This could be removed if it is common across agents to nest these fields in `sent:` for instance.
+    #     resp_json = json.loads(resp_text)
+    #     if field_to_move in resp_json:
+    #         # If it is already a top level field, forget about it.
+    #         return resp_text
+    #     else:
+    #         # Find the field and put a copy as a top level
+    #         for key in resp_json:
+    #             if field_to_move in resp_json[key]:
+    #                 field_value = resp_json[key][field_to_move]
+    #                 resp_json[field_to_move] = field_value
+    #                 return json.dumps(resp_json)
 
-        return resp_text
+    #     return resp_text
 
     async def make_agent_GET_request(
         self, command: BackchannelCommand
@@ -1494,7 +1494,7 @@ class MockAgentBackchannel(AgentBackchannel):
             )
 
             (resp_status, resp_text) = await self.admin_GET(agent_operation)
-            resp_text = self.move_field_to_top_level(resp_text, "state")
+            # resp_text = self.move_field_to_top_level(resp_text, "state")
             return (resp_status, resp_text)
 
         elif command.topic == "credential":

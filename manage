@@ -193,7 +193,7 @@ function echoRed (){
 }
 
 function initDockerBuildArgs() {
-  dockerBuildArgs=""
+  dockerBuildArgs="--progress=plain"
 
   # HTTP proxy, prefer lower case
   if [[ "${http_proxy}" ]]; then

@@ -24,6 +24,7 @@ COPY data ./
 
 # aca-py is in /usr/local/bin. The Backchannel is looking for it in ./bin, create a link to it in ./bin
 RUN mkdir -p ./bin
+RUN ls -alh /usr/local/bin/aca-py
 RUN ln -s /usr/local/bin/aca-py ./bin/aca-py
 
 ENV PYTHONPATH=/aries-backchannels

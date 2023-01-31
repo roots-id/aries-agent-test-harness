@@ -24,12 +24,23 @@ COPY mock mock
 COPY data ./
 
 # mock is in /usr/local/bin. The Backchannel is looking for it in ./bin, create a link to it in ./bin
-RUN mkdir -p ./bin
-RUN ln -s /usr/local/bin/mock ./bin/mock
+RUN mkdir -p bin
+RUN ln -fs ./mock-agent/version.py bin/mock
+RUN ls -alh mock
+RUN find "$PWD" -name mock
+RUN ls -alh bin
+RUN find "$PWD" -name bin
 
 ENV PYTHONPATH=/aries-backchannels
 ENV RUNMODE=docker
 
-RUN ./bin/mock --version > ./mock-version.txt
+#RUN ls -alh /usr/local/bin
+RUN ls -alh bin
+#RUN ls -alh /aries-backchannels/mock*
+#RUN ./bin/mock --version > ./mock-version.txt
+
+RUN python bin/mock
+RUN python bin/mock > ./mock-version.txt
+RUN cat ./mock-version.txt
 
 ENTRYPOINT ["bash", "mock/ngrok-wait.sh"]
